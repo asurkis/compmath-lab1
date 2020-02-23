@@ -2,7 +2,9 @@ import numpy as np
 
 
 # Поиск подходящей перестановки методом коллапса волновой функции
-def wave_function_collapse(non_strict: np.ndarray, strict: np.ndarray, permutation: [int] = []) -> [int]:
+def wave_function_collapse(non_strict: np.ndarray,
+                           strict: np.ndarray,
+                           permutation: [int] = []) -> [int]:
     size = len(non_strict)
     position = len(permutation)
     if position == size:
@@ -18,7 +20,9 @@ def wave_function_collapse(non_strict: np.ndarray, strict: np.ndarray, permutati
     return None
 
 
-def solve_prepared(c_matrix: np.ndarray, d_vector: np.ndarray, precision: float) -> np.ndarray:
+def solve_prepared(c_matrix: np.ndarray,
+                   d_vector: np.ndarray,
+                   precision: float) -> np.ndarray:
     x_vector = np.zeros((x_count,))
     diff_vector: np.ndarray
     iteration_count = 0
@@ -34,7 +38,10 @@ def solve_prepared(c_matrix: np.ndarray, d_vector: np.ndarray, precision: float)
     return x_vector
 
 
-def solve_equation(ab_list: [[float]], x_count: int, eq_count: int, precision: float) -> np.ndarray:
+def solve_equation(ab_list: [[float]],
+                   x_count: int,
+                   eq_count: int,
+                   precision: float) -> np.ndarray:
     # Матрица A|B
     a_matrix: np.ndarray = np.array(
         [[ab_list[i][j] if i < eq_count else 0 for j in range(x_count)] for i in range(x_count)])
@@ -83,7 +90,8 @@ precision = float(input('Введите требуемую точность: '))
 print(precision)
 print()
 print('Введите матрицу системы: ')
-ab_list = [[float(s) for s in input().split(' ') if s != ''] for _ in range(eq_count)]
+ab_list = [[float(s) for s in input().split(' ') if s != '']
+           for _ in range(eq_count)]
 
 x_result = solve_equation(ab_list, x_count, eq_count, precision)
 print('X =', x_result)
