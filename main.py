@@ -43,22 +43,25 @@ def solve_equation(ab_list: [[float]],
                    eq_count: int,
                    precision: float) -> np.ndarray:
     # Матрица A|B
-    a_matrix: np.ndarray = np.array(
+    a_matrix_original: np.ndarray = np.array(
         [[ab_list[i][j] if i < eq_count else 0
           for j in range(x_count)]
          for i in range(x_count)])
-    b_vector = np.array([ab_list[i][-1] if i < eq_count else 0
+    b_vector_original = np.array([ab_list[i][-1] if i < eq_count else 0
                          for i in range(x_count)])
 
     # Проверка диагонального преобладания
     print('Проверка диагонального преобладания: ')
     # Подготовка матриц для перебора
-    sums: np.ndarray = abs(a_matrix).sum(axis=1)
-    double_abs: np.ndarray = 2 * abs(a_matrix)
+    sums: np.ndarray = abs(a_matrix_original).sum(axis=1)
+    double_abs: np.ndarray = 2 * abs(a_matrix_original)
     collapse_matrix_non_strict: np.ndarray = double_abs >= sums
     collapse_matrix_strict: np.ndarray = double_abs > sums
-    # Обратная перестановка
-    backward_permutation = [i for i in range(x_count)]
+
+    a_matrix = a_matrix_original
+    b_vector = b_vector_original
+    permutation = [i for i in range(x_count)]
+
     if collapse_matrix_non_strict.diagonal().all() \
             and collapse_matrix_strict.diagonal().any():
         print('Диагональное преобладание изначально')
@@ -72,20 +75,14 @@ def solve_equation(ab_list: [[float]],
             permutation = [i for i in range(x_count)]
         else:
             print('Диагональное преобладание с перестановкой', permutation)
-            a_matrix_new = np.array([a_matrix[p] for p in permutation])
-            b_vector_new = np.array([b_vector[p] for p in permutation])
-            a_matrix = a_matrix_new
-            b_vector = b_vector_new
-        for i in range(x_count):
-            backward_permutation[permutation[i]] = i
+            a_matrix = np.array([a_matrix_original[p] for p in permutation])
+            b_vector = np.array([b_vector_original[p] for p in permutation])
 
     c_matrix = np.eye(x_count) - a_matrix / a_matrix.diagonal()
     d_vector = b_vector / a_matrix.diagonal()
     x_vector = solve_prepared(c_matrix, d_vector, precision)
-    x_vector_backward = np.array([x_vector[backward_permutation[i]]
-                                  for i in range(x_count)])
-    print('A @ X - B =', (a_matrix @ x_vector) - b_vector)
-    return x_vector_backward
+    print('A @ X - B =', (a_matrix_original @ x_vector) - b_vector_original)
+    return x_vector
 
 
 # Ввод данных
