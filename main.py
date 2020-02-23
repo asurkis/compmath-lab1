@@ -60,7 +60,6 @@ def solve_equation(ab_list: [[float]],
 
     a_matrix = a_matrix_original
     b_vector = b_vector_original
-    permutation = [i for i in range(x_count)]
 
     if collapse_matrix_non_strict.diagonal().all() \
             and collapse_matrix_strict.diagonal().any():
@@ -72,7 +71,6 @@ def solve_equation(ab_list: [[float]],
             collapse_matrix_strict)
         if permutation is None:
             print('Диагональное преобладание невозможно')
-            permutation = [i for i in range(x_count)]
         else:
             print('Диагональное преобладание с перестановкой', permutation)
             a_matrix = np.array([a_matrix_original[p] for p in permutation])
