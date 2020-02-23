@@ -44,8 +44,11 @@ def solve_equation(ab_list: [[float]],
                    precision: float) -> np.ndarray:
     # Матрица A|B
     a_matrix: np.ndarray = np.array(
-        [[ab_list[i][j] if i < eq_count else 0 for j in range(x_count)] for i in range(x_count)])
-    b_vector = np.array([ab_list[i][-1] if i < eq_count else 0 for i in range(x_count)])
+        [[ab_list[i][j] if i < eq_count else 0
+          for j in range(x_count)]
+         for i in range(x_count)])
+    b_vector = np.array([ab_list[i][-1] if i < eq_count else 0
+                         for i in range(x_count)])
 
     # Проверка диагонального преобладания
     print('Проверка диагонального преобладания: ')
@@ -56,11 +59,14 @@ def solve_equation(ab_list: [[float]],
     collapse_matrix_strict: np.ndarray = double_abs > sums
     # Обратная перестановка
     backward_permutation = [i for i in range(x_count)]
-    if collapse_matrix_non_strict.diagonal().all() and collapse_matrix_strict.diagonal().any():
+    if collapse_matrix_non_strict.diagonal().all() \
+            and collapse_matrix_strict.diagonal().any():
         print('Диагональное преобладание изначально')
     else:
         print('Диагонального преобладания изначально нет')
-        permutation = wave_function_collapse(collapse_matrix_non_strict, collapse_matrix_strict)
+        permutation = wave_function_collapse(
+            collapse_matrix_non_strict,
+            collapse_matrix_strict)
         if permutation is None:
             print('Диагональное преобладание невозможно')
             permutation = [i for i in range(x_count)]
@@ -76,7 +82,8 @@ def solve_equation(ab_list: [[float]],
     c_matrix = np.eye(x_count) - a_matrix / a_matrix.diagonal()
     d_vector = b_vector / a_matrix.diagonal()
     x_vector = solve_prepared(c_matrix, d_vector, precision)
-    x_vector_backward = np.array([x_vector[backward_permutation[i]] for i in range(x_count)])
+    x_vector_backward = np.array([x_vector[backward_permutation[i]]
+                                  for i in range(x_count)])
     print('A @ X - B =', (a_matrix @ x_vector) - b_vector)
     return x_vector_backward
 
